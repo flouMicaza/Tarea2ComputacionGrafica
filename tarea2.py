@@ -11,15 +11,22 @@ def main():
     ancho = 800
     alto = 600
     init(ancho, alto, "titulo")
-    radio=100
+    radio=50 #tamaño minimo de 50!
+
+
 
     figuras = []
     #t = Triangulo(Vector(200, 200), Vector(600, 200), Vector(400, 500), (1, 0, 0))
     #figuras.append(t)
 
-    f=Personaje(radio,Vector(250, 200),(255, 0, 0))
-    hoja=plataforma_hoja(16)
+    flor=plataforma_flor(radio,(150,150,0))
+    rama=plataforma_rama(200,Vector(200,200))
+    hoja=plataforma_hoja(50,Vector(350,350))
+    f = Personaje(radio, Vector(150, 150), (255, 0, 0))
     figuras.append(f)
+    figuras.append(hoja)
+    figuras.append(flor)
+    figuras.append(rama)
     run = True
     while run:
 
@@ -31,18 +38,21 @@ def main():
                 if event.key == K_SPACE:
                     pass
 
+                if event.key == K_d:
+                    f.pos += Vector(10, 0)
+                if event.key == K_a:
+                    f.pos -= Vector(10, 0)
+                if event.key == K_w:
+                    f.pos += Vector(0, 10)
+                if event.key == K_s:
+                    f.pos -= Vector(0, 10)
+
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # limpiar buffers
 
         # dibujar figuras
-        #for fig in figuras:
-        f.dibujar()
-        hoja.dibujar()
-
-
-        #glBegin(GL_LINES)
-        #glVertex2f(500, 500)
-        #glVertex2f(500, 600)
-        #glEnd()
+        for fig in figuras:
+            fig.dibujar()
 
         pygame.display.flip()  # actualizar pantalla
         pygame.time.wait(int(1000 / 30))  # ajusta a 30 fps

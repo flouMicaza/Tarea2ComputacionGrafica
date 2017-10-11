@@ -34,11 +34,26 @@ class Personaje(Figura):
 
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * 50, sin(ang_i) * 50 + 80)
+            glVertex2f(cos(ang_i) * self.radio/2, sin(ang_i) * self.radio/2 + 0.8*self.radio)
 
         glEnd()
 
-        #ojos
+
+
+        # antenas
+        glBegin(GL_LINES)
+        glColor3f(0, 0, 0)
+        glVertex2f(0.15 * self.radio, 1.15 * self.radio)
+        glVertex2f(0.45 * self.radio, 1.40 * self.radio)
+        glEnd()
+
+        glBegin(GL_LINES)
+        glColor3f(0, 0, 0)
+        glVertex2f(-0.15 * self.radio, 1.15 * self.radio)
+        glVertex2f(-0.45 * self.radio, 1.40 * self.radio)
+        glEnd()
+
+        # ojos
         glBegin(GL_TRIANGLE_FAN)
         glColor3f(1, 1, 1)  # rojo
 
@@ -46,7 +61,7 @@ class Personaje(Figura):
 
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * 5 + 20, sin(ang_i) * 5 + 110)
+            glVertex2f(cos(ang_i) * 5 + 0.2 * self.radio, sin(ang_i) * 5 + self.radio * 1.1)
 
         glEnd()
 
@@ -58,59 +73,47 @@ class Personaje(Figura):
 
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * 5 + -20, sin(ang_i) * 5 + 110)
+            glVertex2f(cos(ang_i) * 5 + -0.2*self.radio, sin(ang_i) * 5 + 1.1*self.radio)
 
         glEnd()
 
-        #antenas
-        glBegin(GL_LINES)
-        glColor3f(0, 0, 0)
-        glVertex2f(15, 115)
-        glVertex2f(45, 140)
-        glEnd()
-
-        glBegin(GL_LINES)
-        glColor3f(0, 0, 0)
-        glVertex2f(-15, 115)
-        glVertex2f(-45, 140)
-        glEnd()
 
         #patas hacia la derecha
         glBegin(GL_LINES)
         glColor3f(0,0,0)
-        glVertex2f(70, 70)
-        glVertex2f(120, 110)
+        glVertex2f(0.70*self.radio, 0.70*self.radio)
+        glVertex2f(1.20*self.radio, 1.10*self.radio)
         glEnd()
 
         glBegin(GL_LINES)
         glColor3f(0, 0, 0)
-        glVertex2f(70, 0)
-        glVertex2f(150, 0)
+        glVertex2f(0.70*self.radio, 0)
+        glVertex2f(1.50*self.radio, 0)
         glEnd()
 
         glBegin(GL_LINES)
         glColor3f(0, 0, 0)
-        glVertex2f(70, -70)
-        glVertex2f(120, -110)
+        glVertex2f(0.70*self.radio, -0.70*self.radio)
+        glVertex2f(1.20*self.radio, -1.10*self.radio)
         glEnd()
 
         #patas hacia la izquierda
         glBegin(GL_LINES)
         glColor3f(0, 0, 0)
-        glVertex2f(-70, 70)
-        glVertex2f(-120, 110)
+        glVertex2f(-0.70*self.radio, 0.70*self.radio)
+        glVertex2f(-1.20*self.radio, 1.10*self.radio)
         glEnd()
 
         glBegin(GL_LINES)
         glColor3f(0, 0, 0)
-        glVertex2f(-70, 0)
-        glVertex2f(-150, 0)
+        glVertex2f(-0.70*self.radio, 0)
+        glVertex2f(-1.50*self.radio, 0)
         glEnd()
 
         glBegin(GL_LINES)
         glColor3f(0, 0, 0)
-        glVertex2f(-70, -70)
-        glVertex2f(-120, -110)
+        glVertex2f(-0.70*self.radio, -0.70*self.radio)
+        glVertex2f(-1.20*self.radio, -1.10*self.radio)
         glEnd()
 
 
@@ -131,16 +134,16 @@ class Personaje(Figura):
         # triangulo de las alas
         glBegin(GL_TRIANGLES)
         glColor3f(0,0,0)  # NEGRO
-        glVertex2f(-45/cos(25),-90)
-        glVertex2f(0,-10)
-        glVertex2f(45/cos(50),-90)
+        glVertex2f(-0.45*self.radio/cos(0.25*self.radio),-0.90*self.radio)
+        glVertex2f(0,-0.10*self.radio)
+        glVertex2f(0.45*self.radio/cos(0.50*self.radio),-0.90*self.radio)
         glEnd()
 
         #linea de almedio
         glBegin(GL_LINES)
         glColor3f(0,0,0)
-        glVertex2f(0,100)
-        glVertex2f(0,-25)
+        glVertex2f(0,self.radio)
+        glVertex2f(0,-0.5*self.radio)
         glEnd()
 
 
@@ -152,7 +155,7 @@ class Personaje(Figura):
         ang = 2 * pi / self.num_triangulos
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * (15)+30, sin(ang_i) * (15)+50)
+            glVertex2f(cos(ang_i) * (0.15*self.radio)+0.30*self.radio, sin(ang_i) * (0.15*self.radio)+0.50*self.radio)
         glEnd()
 
         glBegin(GL_TRIANGLE_FAN)
@@ -161,7 +164,7 @@ class Personaje(Figura):
         ang = 2 * pi / self.num_triangulos
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * (15)+70, sin(ang_i) * (15))
+            glVertex2f(cos(ang_i) * (0.15*self.radio)+0.70*self.radio, sin(ang_i) * (0.15*self.radio))
         glEnd()
 
         glBegin(GL_TRIANGLE_FAN)
@@ -170,7 +173,7 @@ class Personaje(Figura):
         ang = 2 * pi / self.num_triangulos
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * (12) + 40, sin(ang_i) * (12) - 30)
+            glVertex2f(cos(ang_i) * (0.12*self.radio) + 0.4*self.radio, sin(ang_i) * (0.12*self.radio) - 0.3*self.radio)
         glEnd()
 
         glBegin(GL_TRIANGLE_FAN)
@@ -179,7 +182,7 @@ class Personaje(Figura):
         ang = 2 * pi / self.num_triangulos
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * (15) -50, sin(ang_i) * (15) + 50)
+            glVertex2f(cos(ang_i) * (0.15*self.radio) -0.50*self.radio, sin(ang_i) * (0.15*self.radio) + 0.50*self.radio)
         glEnd()
 
         glBegin(GL_TRIANGLE_FAN)
@@ -188,7 +191,7 @@ class Personaje(Figura):
         ang = 2 * pi / self.num_triangulos
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * (15) -30, sin(ang_i) * (15))
+            glVertex2f(cos(ang_i) * (0.15*self.radio) -0.30*self.radio, sin(ang_i) * (0.15*self.radio))
         glEnd()
 
         glBegin(GL_TRIANGLE_FAN)
@@ -197,7 +200,7 @@ class Personaje(Figura):
         ang = 2 * pi / self.num_triangulos
         for i in range(self.num_triangulos):
             ang_i = ang * i
-            glVertex2f(cos(ang_i) * (18) -60, sin(ang_i) * (18) - 50)
+            glVertex2f(cos(ang_i) * (0.18*self.radio) -0.60*self.radio, sin(ang_i) * (0.18*self.radio) - 0.50*self.radio)
         glEnd()
 
 
