@@ -71,7 +71,6 @@ class plataforma_flor(Figura):
         super().__init__(pos, rgb)
 
     def figura(self):
-
         # circulo izq
         glBegin(GL_TRIANGLE_FAN)
         glColor3fv(self.colorHojas)
@@ -122,6 +121,15 @@ class plataforma_flor(Figura):
 
         glEnd()
 
+        #linea para la plataforma
+        glBegin(GL_QUADS)
+        glColor3f(218, 201, 201)
+        glVertex2f(-self.radio,self.radio)
+        glVertex2f(3*self.radio,self.radio)
+        glVertex2f(3*self.radio,self.radio*2/3)
+
+        glVertex2f(-self.radio,self.radio*2/3)
+        glEnd()
 
 class plataforma_rama(Figura):
     def __init__(self, largo, pos=Vector(100, 100), rgb=(115 / 255, 112 / 255, 12 / 255)):

@@ -4,8 +4,28 @@ import os
 from CC3501Utils import *
 from Personajes import *
 from Plataformas import *
-
+from Paredes import *
 os.environ['SDL_VIDEO_CENTERED'] = '1'  # centrar pantalla
+
+
+def creacionPared():
+    flores = []
+    y= 20;
+    deltay=80;
+    while y<600:
+        #florIzq
+        f1 = florFigura((150, 150, 0), Vector(20, y))
+        flores.append(f1)
+        #florDer
+        f1 = florFigura((150, 150, 0), Vector(800-80, y))
+        flores.append(f1)
+        y += deltay
+        f2 = florFigura((255, 0, 255), Vector(800-80, y), (0, 255, 128))
+        flores.append(f2)
+        f2 = florFigura((255, 0, 255), Vector(20, y), (0, 255, 128))
+        flores.append(f2)
+        y += deltay
+    return flores
 
 def main():
     ancho = 800
@@ -13,20 +33,18 @@ def main():
     init(ancho, alto, "titulo")
     radio=50 #tamaño minimo de 50!
 
-
+    florss=creacionPared()
 
     figuras = []
-    #t = Triangulo(Vector(200, 200), Vector(600, 200), Vector(400, 500), (1, 0, 0))
-    #figuras.append(t)
-
     flor=plataforma_flor(radio,(150,150,0))
-    rama=plataforma_rama(200,Vector(200,200))
+    rama=plataforma_rama(500,Vector(80,10))
     hoja=plataforma_hoja(50,Vector(350,350))
-    f = Personaje(radio, Vector(150, 150), (255, 0, 0))
-    figuras.append(f)
-    figuras.append(hoja)
-    figuras.append(flor)
+    f = Personaje(radio, Vector(300, 80), (255, 0, 0))
+
+
     figuras.append(rama)
+    figuras.append(f)
+
     run = True
     while run:
 
@@ -49,6 +67,12 @@ def main():
 
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # limpiar buffers
+
+
+        #dibujar la pared primero
+        for flor in florss:
+            flor.dibujar()
+
 
         # dibujar figuras
         for fig in figuras:
