@@ -302,7 +302,7 @@ def main():
 
         # que cada objeto actue durante el intervalo de tiempo tardado
         t1 = pygame.time.get_ticks()  # mide el tiempo final
-        accion(circulos, t1 - t0)
+        accion(circulos, (t1 - t0)/5)
 
         pygame.display.flip()
         pygame.time.wait(int(1000 / 30))  # ajusta a 30 fps

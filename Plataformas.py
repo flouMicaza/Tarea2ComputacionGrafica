@@ -5,8 +5,9 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'  # centrar pantalla
 
 
 class plataforma_hoja(Figura):
-    def __init__(self, largo, pos=Vector(300, 300), rgb=(152 / 255, 1, 152 / 255)):
+    def __init__(self, largo, pos=Vector(300, 300), rgb=(152 / 255, 1, 152 / 255),vel=Vector(0,0)):
         self.largo = largo
+        self.vel=vel
         self.numtriangulos = int(1.3 * largo)
         super().__init__(pos, rgb)
 
@@ -61,11 +62,18 @@ class plataforma_hoja(Figura):
 
         distRaices = (self.largo + 24) / 2 - self.largo / 3
 
+    def mover(self,dt,g):
+        # modificamos la velocidad con la aceleracion
+        self.vel = sumar(self.vel, ponderar(dt, g))
+
+        # modificamos la posicion con la velocidad
+        self.pos = sumar(self.pos, Vector(0,-15))
 
 # plataforma que recibe el radio del circulo central y el color de sus hojas ademas del color del centro
 class plataforma_flor(Figura):
-    def __init__(self, radio, colorHojas, pos=Vector(100, 100), rgb=(1, 51 / 255, 1)):
+    def __init__(self, radio, colorHojas, pos=Vector(100, 100), rgb=(1, 51 / 255, 1),vel=Vector(0,0)):
         self.radio = radio
+        self.vel=vel
         self.num_triangulos = int(1.3 * radio)
         self.colorHojas = colorHojas
         super().__init__(pos, rgb)
@@ -131,9 +139,18 @@ class plataforma_flor(Figura):
         glVertex2f(-self.radio,self.radio*2/3)
         glEnd()
 
+    def mover(self, dt,g):
+        # modificamos la velocidad con la aceleracion
+        self.vel = sumar(self.vel, ponderar(dt, g))
+
+        # modificamos la posicion con la velocidad
+        self.pos = sumar(self.pos, Vector(0,-15))
+
+
 class plataforma_rama(Figura):
-    def __init__(self, largo, pos=Vector(100, 100), rgb=(115 / 255, 112 / 255, 12 / 255)):
+    def __init__(self, largo, pos=Vector(100, 100), rgb=(115 / 255, 112 / 255, 12 / 255),vel=Vector(0,0)):
         self.largo = largo
+        self.vel=vel
         super().__init__(pos, rgb)
 
     def figura(self):
@@ -164,3 +181,11 @@ class plataforma_rama(Figura):
         glVertex2f(self.largo + 10,- tan(45) * self.largo /8)
         glVertex2f(self.largo, -tan(45) * self.largo /8)
         glEnd()
+
+
+    def mover(self,dt,g):
+        # modificamos la velocidad con la aceleracion
+        self.vel = sumar(self.vel, ponderar(dt, g))
+
+        # modificamos la posicion con la velocidad
+        self.pos = sumar(self.pos, Vector(0,-15))

@@ -3,25 +3,13 @@ import os
 os.environ['SDL_VIDEO_CENTERED'] = '1'  # centrar pantalla
 
 
-class Triangulo(Figura):
-    def __init__(self, p1: Vector, p2: Vector, p3: Vector, rgb=(1.0, 1.0, 1.0), pos=Vector(0, 0)):
-        self.p1 = p1
-        self.p2 = p2
-        self.p3 = p3
-        super().__init__(pos, rgb)
-
-    def figura(self):
-        glBegin(GL_TRIANGLES)
-        glVertex2f(self.p1.x, self.p1.y)
-        glVertex2f(self.p2.x, self.p2.y)
-        glVertex2f(self.p3.x, self.p3.y)
-        glEnd()
 
 
 class Personaje(Figura):
-    def __init__(self, radio,pos=Vector(0, 0), rgb=(1.0, 0, 0)):
+    def __init__(self, radio,pos=Vector(0, 0), rgb=(1.0, 0, 0),vel=Vector(0,0)):
         numtriangulos = int(1.3 * radio)
         self.radio=radio
+        self.vel=vel
         self.num_triangulos=numtriangulos
         super().__init__(pos, rgb)
 
@@ -134,9 +122,9 @@ class Personaje(Figura):
         # triangulo de las alas
         glBegin(GL_TRIANGLES)
         glColor3f(0,0,0)  # NEGRO
-        glVertex2f(-0.45*self.radio/cos(0.25*self.radio),-0.90*self.radio)
-        glVertex2f(0,-0.10*self.radio)
-        glVertex2f(0.45*self.radio/cos(0.50*self.radio),-0.90*self.radio)
+        glVertex2f(0, -0.10 * self.radio)
+        glVertex2f(cos(ang*-self.num_triangulos/3) * (self.radio), sin(ang*-self.num_triangulos/3) * (self.radio))
+        glVertex2f(cos(ang*-self.num_triangulos/6) * (self.radio), sin(ang*-self.num_triangulos/6) * (self.radio))
         glEnd()
 
         #linea de almedio
@@ -145,8 +133,6 @@ class Personaje(Figura):
         glVertex2f(0,self.radio)
         glVertex2f(0,-0.5*self.radio)
         glEnd()
-
-
 
         #puntitos
         glBegin(GL_TRIANGLE_FAN)
@@ -203,4 +189,21 @@ class Personaje(Figura):
             glVertex2f(cos(ang_i) * (0.18*self.radio) -0.60*self.radio, sin(ang_i) * (0.18*self.radio) - 0.50*self.radio)
         glEnd()
 
+
+    def saltar(self,dt,g):
+        if self.pos.y<530:
+            self.vel = sumar(self.vel, ponderar(dt, g))
+
+        # modificamos la posicion con la velocidad
+            self.pos = sumar(self.pos, ponderar(-dt, self.vel))
+            glLoadIdentity()
+
+    def bajar(self,dt,g):
+        if self.pos.y>20:
+            print("holi")
+            self.vel = sumar(self.vel, ponderar(dt, g))
+
+        # modificamos la posicion con la velocidad
+            self.pos = sumar(self.pos, ponderar(dt, self.vel))
+            glLoadIdentity()
 
