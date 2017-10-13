@@ -6,6 +6,7 @@ from Personajes import *
 from Plataformas import *
 from Paredes import *
 from random import *
+from Reloj import *
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'  # centrar pantalla
 
@@ -37,26 +38,58 @@ def generadorPlataformas():
     medidas.append(50)
     medidas.append(45)
     medidas.append(40)
-    vel = Vector(uniform(-30, 30), 0.0)
-    a = randint(1, 3)
-    b = randint(1, 4)
-    x = randint(100, 550)
-    if a == 1:
-        return plataforma_flor(medidas[b], (150, 150, 0), Vector(x, 500), (1, 51 / 255, 1), vel)
-    elif b == 2:
-        return plataforma_rama(medidas[b] * 4, Vector(x, 500), (115 / 255, 12 / 255, 12 / 255), vel)
-    else:
-        return plataforma_hoja(medidas[b], Vector(x, 500), (152 / 255, 1, 152 / 255), vel)
+    plataformas = []
+    for i in range(50):
+        if i < 4:
+            vel = Vector(uniform(-30, 30), 0.0)
+            a = randint(1, 3)
+            b = randint(1, 4)
+            x = randint(100, 550)
+            if a == 1:
+                plataformas.append(plataforma_flor(medidas[b], (150, 150, 0), Vector(x, 500), (1, 51 / 255, 1), vel))
+            elif b == 2:
+                plataformas.append(plataforma_rama(medidas[b] * 4, Vector(x, 450), (115 / 255, 12 / 255, 12 / 255), vel))
+            else:
+                plataformas.append(plataforma_hoja(medidas[b], Vector(x, 300), (152 / 255, 1, 152 / 255), vel))
+
+        else:
+            vel = Vector(uniform(-30, 30), 0.0)
+            a = randint(1, 3)
+            b = randint(1, 4)
+            x = randint(100, 550)
+            if a == 1:
+                plataformas.append(plataforma_flor(medidas[b], (150, 150, 0), Vector(x, 500), (1, 51 / 255, 1), vel))
+            elif b == 2:
+                plataformas.append(
+                    plataforma_rama(medidas[b] * 4, Vector(x, 500), (115 / 255, 12 / 255, 12 / 255), vel))
+            else:
+                plataformas.append(plataforma_hoja(medidas[b], Vector(x, 500), (152 / 255, 1, 152 / 255), vel))
+
+    return plataformas
 
 
 def accionPlataforma(plats, dt):
     # para cada plataforma
-    for plat in plats:
+    for plat in range(3):
         # se mueva hacia abajo
 
+        plats[plat].mover(dt / 60.0, g)
+        print(plats[plat])
+        if plats[0].pos.y < 0:
+            del plats[0]
+
+
+
+def accionFlor(plats, dt):
+    # para cada plataforma
+    for plat in plats:
+        # se mueva hacia abajo
         plat.mover(dt / 60.0, g)
         if plat.pos.y < 0:
             del plats[0]
+            a = creacionPared()
+            for i in a:
+                plats.append(i)
 
     # se setea el SR inicial
     glLoadIdentity()
@@ -64,7 +97,7 @@ def accionPlataforma(plats, dt):
 
 def sobrePlataforma(fig, plats):
     for plat in plats:
-        if (fig.pos.y - plat.pos.y) < 10 and (fig.pos.x - plat.pos.x) < 10:
+        if (fig.pos.y - plat.pos.y) < 7 and (fig.pos.x - plat.pos.x) < 5:
             return True
         else:
             return False
@@ -81,22 +114,22 @@ def main():
     radio_china = 50
     florss = creacionPared()
     rama = plataforma_rama(500, Vector(80, 10))
+    reloj = Reloj(50,Vector(750,20),(1,1,1))
 
     ######################base################################
 
     #####gravedad inicial####
     g0 = Vector(0.0, -4.0)
     g = g0
-    radio=20
-    figuras = []
-    figuras.append(rama)
-    flor=plataforma_flor(radio,(150,150,0),Vector(100,500))
-    flor2 = plataforma_flor(radio, (196/255, 97/255, 140/255),Vector(350,200))
-    rama=plataforma_rama(500,Vector(80,10))
-    rama2 = plataforma_rama(radio*4, Vector(400, 100))
-    hoja=plataforma_hoja(50,Vector(550,350))
-    hoja1 = plataforma_hoja(50, Vector(200, 450))
+    radio = 20
+    figuras = generadorPlataformas()
 
+    flor = plataforma_flor(radio, (150, 150, 0), Vector(100, 500))
+    flor2 = plataforma_flor(radio, (196 / 255, 97 / 255, 140 / 255), Vector(350, 200))
+    rama = plataforma_rama(500, Vector(80, 10))
+    rama2 = plataforma_rama(radio * 4, Vector(400, 100))
+    hoja = plataforma_hoja(50, Vector(550, 350))
+    hoja1 = plataforma_hoja(50, Vector(200, 450))
 
     f = Personaje(radio_china, Vector(300, 80), (255, 0, 0))
 
@@ -104,16 +137,14 @@ def main():
     t0 = pygame.time.get_ticks()
     run = True
     while run:
-        if len(figuras)<5:
-            fig1 = generadorPlataformas()  # plataforma nueva
-            figuras.append(fig1)
+
         for event in pygame.event.get():
-            if event.type == QUIT :  # cerrar ventana
+            if event.type == QUIT:  # cerrar ventana
                 run = False
 
             if event.type == KEYDOWN:
                 if event.key == K_SPACE and f.pos.y < 530:
-                    salto = 1
+                    salto = 5
 
                 # va a la der pero no choca
                 if event.key == K_RIGHT and f.pos.x < 700:
@@ -123,7 +154,9 @@ def main():
                     f.pos -= Vector(10, 0)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # limpiar buffers
+
         t1 = pygame.time.get_ticks()  # mide el tiempo final
+
         # ESCENAINICIAL!#######################################
         # dibujar la pared primero
         for flor in florss:
@@ -131,19 +164,26 @@ def main():
 
         ###################################################
 
-        for fig in figuras:
-            fig.dibujar()
 
+
+
+        figuras[0].dibujar()
+        figuras[1].dibujar()
+        figuras[3].dibujar()
+
+        rama.dibujar()
+        reloj.dibujar()
         if salto < 10 and salto > 0:
             f.saltar((t1 - t0) / 100.0, g)
             accionPlataforma(figuras, t1 - t0)
-            accionPlataforma(florss, t1 - t0)
             salto += 1
 
-
-        elif salto >= 10 and not (sobrePlataforma(f, figuras)):
-            f.bajar((t1 - t0) / 60.0, g)
-
+        elif salto >= 10 and not (sobrePlataforma(f, figuras)) :
+            if salto>20:
+                salto=0
+            else:
+                f.bajar((t1 - t0) / 60.0, g)
+                salto += 1
 
         f.dibujar()
 
