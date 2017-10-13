@@ -64,9 +64,9 @@ def accionPlataforma(plats, dt):
 
 def sobrePlataforma(fig, plats):
     for plat in plats:
-        if (fig.pos.y - plat.pos.y) < 5 and (fig.pos.x-plat.pos.x)<10:
+        if (fig.pos.y - plat.pos.y) < 10 and (fig.pos.x - plat.pos.x) < 10:
             return True
-        else :
+        else:
             return False
 
 
@@ -81,24 +81,34 @@ def main():
     radio_china = 50
     florss = creacionPared()
     rama = plataforma_rama(500, Vector(80, 10))
+
     ######################base################################
 
     #####gravedad inicial####
     g0 = Vector(0.0, -4.0)
     g = g0
-
+    radio=20
     figuras = []
-    fig1 = generadorPlataformas()  # plataforma nueva
-    figuras.append(fig1)
+    figuras.append(rama)
+    flor=plataforma_flor(radio,(150,150,0),Vector(100,500))
+    flor2 = plataforma_flor(radio, (196/255, 97/255, 140/255),Vector(350,200))
+    rama=plataforma_rama(500,Vector(80,10))
+    rama2 = plataforma_rama(radio*4, Vector(400, 100))
+    hoja=plataforma_hoja(50,Vector(550,350))
+    hoja1 = plataforma_hoja(50, Vector(200, 450))
+
+
     f = Personaje(radio_china, Vector(300, 80), (255, 0, 0))
 
     # se empieza a medir el tiempo
     t0 = pygame.time.get_ticks()
     run = True
     while run:
-
+        if len(figuras)<5:
+            fig1 = generadorPlataformas()  # plataforma nueva
+            figuras.append(fig1)
         for event in pygame.event.get():
-            if event.type == QUIT or f.pos.y < 15:  # cerrar ventana
+            if event.type == QUIT :  # cerrar ventana
                 run = False
 
             if event.type == KEYDOWN:
@@ -119,14 +129,13 @@ def main():
         for flor in florss:
             flor.dibujar()
 
-        vecRama = [rama]
         ###################################################
 
         for fig in figuras:
             fig.dibujar()
 
         if salto < 10 and salto > 0:
-            f.saltar((t1 - t0) / 60.0, g)
+            f.saltar((t1 - t0) / 100.0, g)
             accionPlataforma(figuras, t1 - t0)
             accionPlataforma(florss, t1 - t0)
             salto += 1
@@ -135,14 +144,12 @@ def main():
         elif salto >= 10 and not (sobrePlataforma(f, figuras)):
             f.bajar((t1 - t0) / 60.0, g)
 
-        accionPlataforma(vecRama, t1 - t0)
+
         f.dibujar()
 
         # el tiempo inicial de la siguiente iteracion es el tiempo final de esta iteracion
 
         t0 = t1
-        print(salto)
-
         pygame.display.flip()  # actualizar pantalla
         pygame.time.wait(int(1000 / 30))  # ajusta a 30 fps
 

@@ -200,7 +200,6 @@ class Personaje(Figura):
 
     def bajar(self,dt,g):
         if self.pos.y>20:
-            print("holi")
             self.vel = sumar(self.vel, ponderar(dt, g))
 
         # modificamos la posicion con la velocidad
